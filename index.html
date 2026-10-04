@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TBC Golden Eagle Sovereign</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0b0e14;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .tbc-app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+      background: #12161f;
+    }
+    .screen-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      padding-bottom: 90px;
+    }
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .badge-ready {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .level-up-text {
+      color: #eab308;
+      font-size: 13px;
+    }
+    .assets-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .section-subtitle {
+      color: #94a3b8;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+    .assets-main-amount {
+      font-size: 36px;
+      font-weight: bold;
+      color: #facc15;
+      margin: 10px 0;
+    }
+    .wallet-splits {
+      display: flex;
+      justify-content: space-around;
+      font-size: 11px;
+      color: #64748b;
+    }
+    .mining-core-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 40px 0;
+    }
+    .golden-eagle-coin-btn {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 30px rgba(250, 204, 21, 0.4);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.1s ease;
+    }
+    .golden-eagle-coin-btn:active {
+      transform: scale(0.95);
+    }
+    .golden-eagle-coin-btn h2 {
+      color: #12161f;
+      font-size: 28px;
+      margin: 0;
+    }
+    .energy-container {
+      margin-bottom: 20px;
+    }
+    .progress-bar-bg {
+      background: #1e293b;
+      height: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    .progress-bar-fill {
+      background: #facc15;
+      height: 100%;
+      width: 85%;
+      transition: width 0.2s ease;
+    }
+    .main-action-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+      border: none;
+      border-radius: 12px;
+      color: #12161f;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .bottom-navigation-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: #0d1117;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 1px solid #1e293b;
+    }
+    .nav-tab-btn {
+      background: none;
+      border: none;
+      color: #64748b;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .nav-tab-btn.active {
+      color: #facc15;
+    }
+  </style>
+</head>
+<body>
+  <div class="tbc-app-container">
+    <div class="screen-content">
+      <div class="top-header">
+        <span class="badge-ready">🟢 READY</span>
+        <span class="level-up-text">0.008$ left to Lvl UP</span>
+      </div>
+
+      <div class="assets-section">
+        <p class="section-subtitle">ASSETS</p>
+        <h1 id="assetsAmount" class="assets-main-amount">659.5891 TBC</h1>
+        <div class="wallet-splits">
+          <span>HOLDING WALLET: 488.273 TBC</span>
+          <span>POOL WALLET: 171.3159 TBC</span>
+        </div>
+      </div>
+
+      <div class="mining-core-container" onclick="handleTap()">
+        <div class="golden-eagle-coin-btn">
+          <h2>TBC</h2>
+        </div>
+      </div>
+
+      <div class="energy-container">
+        <span id="energyText">⚡ Energy: 850 / 1000</span>
+        <div class="progress-bar-bg">
+          <div id="energyFill" class="progress-bar-fill" style="width: 85%;"></div>
+        </div>
+      </div>
+
+      <button class="main-action-btn" onclick="handleClaim()">CLAIM</button>
+    </div>
+
+    <nav class="bottom-navigation-bar">
+      <button class="nav-tab-btn active">⛏️ Mine</button>
+      <button class="nav-tab-btn">📋 Tasks</button>
+      <button class="nav-tab-btn">⚡ Miners</button>
+      <button class="nav-tab-btn">👥 Friends</button>
+      <button class="nav-tab-btn">👤 Profile</button>
+    </nav>
+  </div>
+
+  <script>
+    let assets = 659.5891;
+    let energy = 850;
+    const maxEnergy = 1000;
+
+    function handleTap() {
+      if (energy > 0) {
+        assets += 0.1;
+        energy -= 1;
+        document.getElementById('assetsAmount').innerText = assets.toFixed(4) + " TBC";
+        document.getElementById('energyText').innerText = `⚡ Energy: ${energy} / ${maxEnergy}`;
+        document.getElementById('energyFill').style.width = (energy / maxEnergy) * 100 + "%";
+      }
+    }
+
+    function handleClaim() {
+      alert("Claim successful! Rewards moved to pool wallet.");
+    }
+  </script>
+</body>
+</html>
